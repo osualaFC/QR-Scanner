@@ -1,9 +1,11 @@
 package com.example.qrscannerapp
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -19,6 +21,7 @@ private const val REQUEST_CODE = 1
 class MainActivity : AppCompatActivity() {
 
     private lateinit var codeScanner: CodeScanner
+    private lateinit var str: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,19 @@ class MainActivity : AppCompatActivity() {
 
         setUpPermission()
         scanCode()
+
+        str = textView.text.toString()
+        if(Patterns.WEB_URL.matcher(str).matches()) {
+            textView.setTextColor(resources.getColor(R.color.colorPrimary))
+        }
+
+        textView.setOnClickListener {
+
+                intent = Intent(this, DetailsActivity::class.java)
+                intent.putExtra("str", str)
+                startActivity(intent)
+
+        }
     }
 
     private fun scanCode(){
